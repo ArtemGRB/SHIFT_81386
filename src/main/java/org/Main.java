@@ -9,6 +9,7 @@ public class Main {
         Config config = new Config();
         DataBase dataBase = new DataBase();
         FileService fileService = new FileService(dataBase, config);
+        StatService statService = new StatService(dataBase);
 
         for (int i = 0; i < args.length; i++) {
 
@@ -47,6 +48,14 @@ public class Main {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+
+        if (config.isShortStatistic()){
+            statService.printShortStat();
+        }
+
+        if (config.isFullStatistic()){
+            statService.printFullStat();
         }
     }
 }
