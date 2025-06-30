@@ -1,4 +1,8 @@
-package org;
+package org.service;
+
+import org.config.Config;
+import org.data.DataBase;
+import org.TypeData;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -9,8 +13,8 @@ import java.util.regex.Pattern;
 
 public class FileService {
 
-    DataBase dataBase;
-    Config config;
+    private DataBase dataBase;
+    private Config config;
 
     private static final Pattern INTEGER_PATTERN = Pattern.compile("^-?\\d+$");
     private static final Pattern FLOAT_PATTERN = Pattern.compile("^-?\\d+\\.\\d+(?:[Ee][-+]?\\d+)?$");

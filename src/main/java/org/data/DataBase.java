@@ -1,4 +1,4 @@
-package org;
+package org.data;
 
 import java.util.ArrayList;
 import java.util.List;

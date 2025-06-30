@@ -1,5 +1,10 @@
 package org;
 
+import org.config.Config;
+import org.data.DataBase;
+import org.service.FileService;
+import org.service.StatService;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -41,7 +46,7 @@ public class Main {
 
 
         try {
-            for (String fileName: config.getInputFiles()) {
+            for (String fileName : config.getInputFiles()) {
                 fileService.process(fileName);
             }
         } catch (FileNotFoundException e) {
@@ -50,11 +55,11 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        if (config.isShortStatistic()){
+        if (config.isShortStatistic()) {
             statService.printShortStat();
         }
 
-        if (config.isFullStatistic()){
+        if (config.isFullStatistic()) {
             statService.printFullStat();
         }
     }

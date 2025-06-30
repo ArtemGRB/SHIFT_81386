@@ -1,15 +1,15 @@
-package org;
+package org.service;
+
+import org.data.DataBase;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class StatService {
 
-    DataBase dataBase;
+    private DataBase dataBase;
 
-    public StatService(DataBase dataBase) {
-        this.dataBase = dataBase;
-    }
+    public StatService(DataBase dataBase) {this.dataBase = dataBase;}
 
     public void printShortStat(){
 
