@@ -1,5 +1,5 @@
 package org;
 
-enum TypeData {
+public enum TypeData {
     INTEGER, FLOAT, STRING
 }
