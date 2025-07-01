@@ -1,56 +1,63 @@
 package org.service;
 
 import org.config.Config;
-import org.data.DataBase;
-import org.TypeData;
+import org.repository.InMemoryRepository;
+import org.enums.TypeData;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class FileService {
 
-    private DataBase dataBase;
-    private Config config;
+    private final InMemoryRepository inMemoryRepository;
+    private final Config config;
 
     private static final Pattern INTEGER_PATTERN = Pattern.compile("^-?\\d+$");
     private static final Pattern FLOAT_PATTERN = Pattern.compile("^-?\\d+\\.\\d+(?:[Ee][-+]?\\d+)?$");
 
-    public FileService(DataBase dataBase, Config config) {
-        this.dataBase = dataBase;
+    public FileService(InMemoryRepository inMemoryRepository, Config config) {
+        this.inMemoryRepository = inMemoryRepository;
         this.config = config;
     }
 
-    public void process(String inputFiles) throws IOException {
+    public void process(String inputFiles) {
         processFiles(inputFiles);
         createOutputFolder();
-        writeToFile(dataBase.getIntegerList(), TypeData.INTEGER);
-        writeToFile(dataBase.getFloatList(), TypeData.FLOAT);
-        writeToFile(dataBase.getStringList(), TypeData.STRING);
+        writeToFile(inMemoryRepository.getIntegerList(), TypeData.INTEGER);
+        writeToFile(inMemoryRepository.getFloatList(), TypeData.FLOAT);
+        writeToFile(inMemoryRepository.getStringList(), TypeData.STRING);
     }
 
-    private void processFiles(String inputFiles) throws FileNotFoundException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFiles))) {
-            String string;
-            while ((string = reader.readLine()) != null) {
-                if (INTEGER_PATTERN.matcher(string).matches()) {
-                    dataBase.getIntegerList().add(string);
-                } else if (FLOAT_PATTERN.matcher(string).matches()) {
-                    dataBase.getFloatList().add(string);
+    private void processFiles(String inputFile) {
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+
+                if (INTEGER_PATTERN.matcher(line).matches()) {
+                    inMemoryRepository.getIntegerList().add(line);
+                } else if (FLOAT_PATTERN.matcher(line).matches()) {
+                    inMemoryRepository.getFloatList().add(line);
                 } else {
-                    dataBase.getStringList().add(string);
+                    inMemoryRepository.getStringList().add(line);
                 }
             }
+        } catch (FileNotFoundException e) {
+            System.err.println("Ошибка: файл не найден - " + inputFile);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Ошибка чтения файла: " + inputFile + " - " + e.getMessage());
         }
     }
 
     private void writeToFile(List<String> list, TypeData typeData) {
-        if(list.isEmpty()){return;}
+        if (list.isEmpty()) {
+            return;
+        }
         String fileName = config.getOutputPath() +
                 File.separator +
                 config.getPrefix() +
@@ -62,27 +69,36 @@ public class FileService {
                 writer.newLine();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Ошибка записи файла " + fileName + ":" + e.getMessage());
         }
     }
 
-    private void createOutputFolder() throws IOException {
-        Path path = Paths.get(config.getOutputPath());
-        if (!Files.exists(path)) {
-            Files.createDirectories(path);
+    private void createOutputFolder() {
+        try {
+            Path path = Paths.get(config.getOutputPath());
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
+            }
+        } catch (IOException e) {
+            System.err.println("Ошибка при создании директории: " + e.getMessage() +
+                    "Все файлы создадутся в корневой папке программы");
+            config.setOutputPath(".");
+
         }
     }
 
     private String typeToString(TypeData typeData) {
         switch (typeData) {
-            case INTEGER:
+            case INTEGER -> {
                 return "integers.txt";
-            case FLOAT:
+            }
+            case FLOAT -> {
                 return "floats.txt";
-            case STRING:
+            }
+            case STRING -> {
                 return "strings.txt";
-            default:
-                throw new IllegalStateException("Unexpected value: " + typeData);
+            }
+            default -> throw new IllegalStateException("Неизвестное значение: " + typeData);
         }
     }
 }
