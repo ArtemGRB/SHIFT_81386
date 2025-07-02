@@ -23,20 +23,27 @@
 
 ## 📁 Структура проекта
 ```bash
-src/
-   ├── org
-   │   ├── box
-   │   │   └── ServiceBox.java
-   │   ├── config
-   │   │   └── Config.java
-   │   ├── enums
-   │   │   └── TypeData.java
-   │   ├── repository
-   │   │   └── InMemoryRepository.java
-   │   └── service
-   │       ├── FileService.java
-   │       └── StatService.java
-   └── Main.java
+├── main/
+│   ├── java/org/
+│   │   ├── box/ServiceBox.java
+│   │   ├── config/Config.java
+│   │   ├── enums/TypeData.java
+│   │   ├── repository/InMemoryRepository.java
+│   │   ├── service/
+│   │   │   ├── FileService.java
+│   │   │   └── StatService.java
+│   │   └── Main.java
+│   └── resources/
+│
+└── test/
+    ├── java/org/
+    │   ├── box/ServiceBoxTest.java
+    │   ├── repository/InMemoryRepositoryTest.java 
+    │   ├── service/
+    │   │   ├── FileServiceTest.java
+    │   │   └── StatServiceTest.java
+    │   └── MainIntegrationTest.java
+    └── resources/  
 ```
 
 ⚙️ Как запустить
@@ -94,5 +101,5 @@ mvn test
 ```
 
 🧑‍💻 Автор
-Создатель: Гребнев Артем
+Создатель: Гребнев Артем  
 GitHub: ArtemGRB
