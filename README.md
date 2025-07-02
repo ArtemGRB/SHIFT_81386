@@ -45,8 +45,9 @@ src/
 ```bash
 javac -d out $(find ./src -name "*.java")
 java -cp out org.Main -o output -s input.txt
-Или используйте Maven:
 ```
+Или используйте Maven:
+
 ```bash
 mvn clean package
 java -jar target/app.jar -o output -s input.txt
