@@ -19,8 +19,8 @@ public class ServiceBox {
         registerStatService();
     }
 
-    private <T> void register(String type, T instance) {
-        objets.put(type, instance);
+    private <T> void register(Class<T> type, T instance) {
+        objets.put(type.getName(), instance);
     }
 
     public <T> T get(Class<T> type) {
@@ -32,11 +32,11 @@ public class ServiceBox {
     }
 
     private void registerConfig() {
-        register(Config.class.getName(), new Config());
+        register(Config.class, new Config());
     }
 
     private void registerInMemoryRepository() {
-        register(InMemoryRepository.class.getName(), new InMemoryRepository());
+        register(InMemoryRepository.class, new InMemoryRepository());
     }
 
     private void registerFileService() {
@@ -47,7 +47,7 @@ public class ServiceBox {
             registerConfig();
         }
 
-        register(FileService.class.getName(), new FileService(
+        register(FileService.class, new FileService(
                 get(InMemoryRepository.class),
                 get(Config.class)));
     }
@@ -57,7 +57,7 @@ public class ServiceBox {
             registerInMemoryRepository();
         }
 
-        register(StatService.class.getName(), new StatService(
+        register(StatService.class, new StatService(
                 get(InMemoryRepository.class)));
     }
 }
