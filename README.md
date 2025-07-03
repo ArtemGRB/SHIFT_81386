@@ -47,13 +47,7 @@
 ```
 
 ⚙️ Как запустить
-Скомпилируйте и запустите:
-
-```bash
-javac -d out $(find ./src -name "*.java")
-java -cp out org.Main -o output -s input.txt
-```
-Или используйте Maven:
+Используйте Maven:
 
 ```bash
 mvn clean package
