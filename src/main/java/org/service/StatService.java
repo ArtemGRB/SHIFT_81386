@@ -1,11 +1,9 @@
 package org.service;
 
 import org.repository.InMemoryRepository;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class StatService {
 
@@ -39,25 +37,25 @@ public class StatService {
         System.out.println("----------------------------------");
 
         if (!inMemoryRepository.getIntegerList().isEmpty()) {
-            System.out.println("Целые числа: " + inMemoryRepository.getIntegerList().size());
-            ArrayList<Long> arrayLongList = inMemoryRepository.getIntegerList().stream()
-                    .map(Long::parseLong)
-                    .collect(Collectors.toCollection(ArrayList::new));
-            System.out.println("  Минимальное: " + Collections.min(arrayLongList));
-            System.out.println("  Максимальное: " + Collections.max(arrayLongList));
-            System.out.println("  Сумма: " + calculateSum(inMemoryRepository.getIntegerList()));
-            System.out.println("  Среднее: " + calculateAverage(inMemoryRepository.getIntegerList()));
+
+            List<Long> longList = inMemoryRepository.getIntegerList();
+
+            System.out.println("Целые числа: " + longList.size());
+            System.out.println("  Минимальное: " + Collections.min(longList));
+            System.out.println("  Максимальное: " + Collections.max(longList));
+            System.out.println("  Сумма: " + calculateSum(longList));
+            System.out.println("  Среднее: " + calculateAverage(longList));
         }
 
         if (!inMemoryRepository.getFloatList().isEmpty()) {
-            System.out.println("Вещественные числа: " + inMemoryRepository.getFloatList().size());
-            ArrayList<Double> arrayDoubleList = inMemoryRepository.getFloatList().stream()
-                    .map(Double::parseDouble)
-                    .collect(Collectors.toCollection(ArrayList::new));
-            System.out.println("  Минимальное: " + Collections.min(arrayDoubleList));
-            System.out.println("  Максимальное: " + Collections.max(arrayDoubleList));
-            System.out.println("  Сумма: " + calculateSum(inMemoryRepository.getFloatList()));
-            System.out.println("  Среднее: " + calculateAverage(inMemoryRepository.getFloatList()));
+
+            List<Double> doubleList = inMemoryRepository.getFloatList();
+
+            System.out.println("Вещественные числа: " + doubleList.size());
+            System.out.println("  Минимальное: " + Collections.min(doubleList));
+            System.out.println("  Максимальное: " + Collections.max(doubleList));
+            System.out.println("  Сумма: " + calculateSum(doubleList));
+            System.out.println("  Среднее: " + calculateAverage(doubleList));
         }
 
         if (!inMemoryRepository.getStringList().isEmpty()) {
@@ -71,16 +69,15 @@ public class StatService {
         }
     }
 
-    private BigDecimal calculateSum(List<String> numbers) {
+    private <T extends Number> BigDecimal calculateSum(List<T> numbers) {
         BigDecimal sum = BigDecimal.ZERO;
-        for (String numStr : numbers) {
-            BigDecimal num = new BigDecimal(numStr);
-            sum = sum.add(num);
+        for (Number num : numbers) {
+            sum = sum.add(BigDecimal.valueOf(num.doubleValue()));
         }
         return sum;
     }
 
-    protected BigDecimal calculateAverage(List<String> numbers) {
+    protected <T extends Number> BigDecimal calculateAverage(List<T> numbers) {
 
         if (numbers.isEmpty()) {
             return BigDecimal.ZERO;
