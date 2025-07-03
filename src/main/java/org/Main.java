@@ -2,7 +2,6 @@ package org;
 
 import org.box.ServiceBox;
 import org.config.Config;
-import org.repository.InMemoryRepository;
 import org.service.FileService;
 import org.service.StatService;
 
@@ -12,10 +11,6 @@ public class Main {
 
         ServiceBox serviceBox = new ServiceBox();
 
-//        Config config = new Config();
-//        InMemoryRepository inMemoryRepository = new InMemoryRepository();
-//        FileService fileService = new FileService(inMemoryRepository, config);
-//        StatService statService = new StatService(inMemoryRepository);
 
         parseArguments(args, serviceBox.get(Config.class));
 

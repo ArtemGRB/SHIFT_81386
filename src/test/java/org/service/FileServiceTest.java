@@ -18,7 +18,7 @@ class FileServiceTest {
         when(config.getPrefix()).thenReturn("");
 
         FileService fileService = new FileService(repo, config);
-        fileService.process("test_input.txt"); // Файл должен существовать в тестовых ресурсах
+        fileService.process("./src/test/resources/test_input.txt");
 
         assertFalse(repo.getIntegerList().isEmpty() ||
                 repo.getFloatList().isEmpty() ||
