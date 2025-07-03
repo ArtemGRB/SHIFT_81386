@@ -52,7 +52,7 @@
 
 ```bash
 mvn clean package
-java -jar target/app.jar -o output -s input.txt
+java -jar target/SHIFT_81386-1.0-SNAPSHOT.jar -p output -f in1.txt in2.txt
 ```
 📂 Выходные файлы
 Данные сохраняются в указанную директорию (по умолчанию - текущая):
@@ -77,7 +77,7 @@ java -jar target/app.jar -o output -s input.txt
 Пример:
 
 ```bash
-java -jar app.jar -o results -p mydata_ -f input1.txt input2.txt
+java -jar target/SHIFT_81386-1.0-SNAPSHOT.jar -o results -p mydata_ -f input1.txt input2.txt
 ```
 
 ## 🧪 Тестирование
@@ -96,5 +96,7 @@ mvn test
 ```
 
 🧑‍💻 Автор
+
 Создатель: Гребнев Артем  
+
 GitHub: ArtemGRB
