@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class FileService {
@@ -25,26 +24,27 @@ public class FileService {
         this.config = config;
     }
 
-    public void process(String inputFiles) {
-        processFiles(inputFiles);
+    public void processWriteFiles() {
         createOutputFolder();
-        writeToFile(inMemoryRepository.getIntegerList(), TypeData.INTEGER);
-        writeToFile(inMemoryRepository.getFloatList(), TypeData.FLOAT);
-        writeToFile(inMemoryRepository.getStringList(), TypeData.STRING);
+        writeToFile(inMemoryRepository.getIntegerList());
+        writeToFile(inMemoryRepository.getFloatList());
+        writeToFile(inMemoryRepository.getStringList());
     }
 
-    private void processFiles(String inputFile) {
+
+
+    public void processFiles(String inputFile) {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
 
                 if (INTEGER_PATTERN.matcher(line).matches()) {
-                    inMemoryRepository.getIntegerList().add(line);
+                    inMemoryRepository.add(Long.parseLong(line));
                 } else if (FLOAT_PATTERN.matcher(line).matches()) {
-                    inMemoryRepository.getFloatList().add(line);
+                    inMemoryRepository.add(Double.parseDouble(line));
                 } else {
-                    inMemoryRepository.getStringList().add(line);
+                    inMemoryRepository.add(line);
                 }
             }
         } catch (FileNotFoundException e) {
@@ -54,18 +54,27 @@ public class FileService {
         }
     }
 
-    private void writeToFile(List<String> list, TypeData typeData) {
+    private <T> void writeToFile(List<T> list) {
+
         if (list.isEmpty()) {
             return;
         }
+
+        final String nameFile = switch (list.get(0).getClass().getSimpleName()){
+            case "Long"-> TypeData.INTEGER.getNameFile();
+            case "Double" -> TypeData.FLOAT.getNameFile();
+            case "String" -> TypeData.STRING.getNameFile();
+            default -> throw new IllegalArgumentException("Неподдерживаемый тип");
+        };
+
         String fileName = config.getOutputPath() +
                 File.separator +
                 config.getPrefix() +
-                typeToString(typeData);
+                nameFile;
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, config.isAppendMark()))) {
-            for (String string : list) {
-                writer.write(string);
+            for (int i = 0; i < list.size(); i++) {
+                writer.write(list.get(i).toString());
                 writer.newLine();
             }
         } catch (IOException e) {
@@ -84,21 +93,6 @@ public class FileService {
                     "Все файлы создадутся в корневой папке программы");
             config.setOutputPath(".");
 
-        }
-    }
-
-    private String typeToString(TypeData typeData) {
-        switch (typeData) {
-            case INTEGER -> {
-                return "integers.txt";
-            }
-            case FLOAT -> {
-                return "floats.txt";
-            }
-            case STRING -> {
-                return "strings.txt";
-            }
-            default -> throw new IllegalStateException("Неизвестное значение: " + typeData);
         }
     }
 }

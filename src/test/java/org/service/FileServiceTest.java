@@ -11,14 +11,14 @@ import static org.mockito.Mockito.*;
 
 class FileServiceTest {
     @Test
-    void testProcessFiles() throws IOException {
+    void testProcessFiles() {
         InMemoryRepository repo = new InMemoryRepository();
         Config config = mock(Config.class);
         when(config.getOutputPath()).thenReturn(".");
         when(config.getPrefix()).thenReturn("");
 
         FileService fileService = new FileService(repo, config);
-        fileService.process("./src/test/resources/test_input.txt");
+        fileService.processFiles("./src/test/resources/test_input.txt");
 
         assertFalse(repo.getIntegerList().isEmpty() ||
                 repo.getFloatList().isEmpty() ||

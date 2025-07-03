@@ -57,8 +57,9 @@ public class Main {
 
     private static void processFiles(Config config, FileService fileService) {
         for (String fileName : config.getInputFiles()) {
-            fileService.process(fileName);
+            fileService.processFiles(fileName);
         }
+        fileService.processWriteFiles();
     }
 
     private static void printStatistics(Config config, StatService statService) {
