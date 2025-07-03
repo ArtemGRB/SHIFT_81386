@@ -47,7 +47,7 @@
 ```
 
 ⚙️ Как запустить
-Используйте Maven:
+  Используйте Maven:
 
 ```bash
 mvn clean package
