@@ -28,7 +28,7 @@ public class ServiceBox {
         if (object == null) {
             throw new IllegalStateException("Объект не найден: " + type.getName());
         }
-        if (!type.isInstance(object)) {  // Проверка типа
+        if (!type.isInstance(object)) {
             throw new ClassCastException("Объект " + object + " не является экземпляром " + type);
         }
         return type.cast(object);
