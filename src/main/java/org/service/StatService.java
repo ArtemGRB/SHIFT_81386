@@ -4,10 +4,11 @@ import org.repository.InMemoryRepository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class StatService {
 
-    private final int SCALE = 3;
+    private static final int SCALE = 3;
     private final InMemoryRepository inMemoryRepository;
 
     public StatService(InMemoryRepository inMemoryRepository) {
@@ -70,11 +71,9 @@ public class StatService {
     }
 
     private <T extends Number> BigDecimal calculateSum(List<T> numbers) {
-        BigDecimal sum = BigDecimal.ZERO;
-        for (Number num : numbers) {
-            sum = sum.add(BigDecimal.valueOf(num.doubleValue()));
-        }
-        return sum;
+        return numbers.stream()
+                .map(num -> BigDecimal.valueOf(num.doubleValue()))
+                .reduce(BigDecimal.ZERO,BigDecimal::add);
     }
 
     protected <T extends Number> BigDecimal calculateAverage(List<T> numbers) {
