@@ -13,11 +13,11 @@ import java.util.regex.Pattern;
 
 public class FileService {
 
-    private final InMemoryRepository inMemoryRepository;
-    private final Config config;
-
     private static final Pattern INTEGER_PATTERN = Pattern.compile("^-?\\d+$");
     private static final Pattern FLOAT_PATTERN = Pattern.compile("^-?\\d+\\.\\d+(?:[Ee][-+]?\\d+)?$");
+
+    private final InMemoryRepository inMemoryRepository;
+    private final Config config;
 
     public FileService(InMemoryRepository inMemoryRepository, Config config) {
         this.inMemoryRepository = inMemoryRepository;
@@ -60,21 +60,11 @@ public class FileService {
             return;
         }
 
-        final String nameFile = switch (list.get(0).getClass().getSimpleName()){
-            case "Long"-> TypeData.INTEGER.getNameFile();
-            case "Double" -> TypeData.FLOAT.getNameFile();
-            case "String" -> TypeData.STRING.getNameFile();
-            default -> throw new IllegalArgumentException("Неподдерживаемый тип");
-        };
-
-        String fileName = config.getOutputPath() +
-                File.separator +
-                config.getPrefix() +
-                nameFile;
+        String fileName = getFileName(list);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, config.isAppendMark()))) {
-            for (int i = 0; i < list.size(); i++) {
-                writer.write(list.get(i).toString());
+            for (T t : list) {
+                writer.write(t.toString());
                 writer.newLine();
             }
         } catch (IOException e) {
@@ -94,5 +84,19 @@ public class FileService {
             config.setOutputPath(".");
 
         }
+    }
+
+    private <T> String getFileName(List<T> list){
+        final String nameFile = switch (list.get(0).getClass().getSimpleName()){
+            case "Long"-> TypeData.INTEGER.getNameFile();
+            case "Double" -> TypeData.FLOAT.getNameFile();
+            case "String" -> TypeData.STRING.getNameFile();
+            default -> throw new IllegalArgumentException("Неподдерживаемый тип");
+        };
+
+        return config.getOutputPath() +
+                File.separator +
+                config.getPrefix() +
+                nameFile;
     }
 }
