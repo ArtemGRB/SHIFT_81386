@@ -63,8 +63,8 @@ public class FileService {
         String fileName = getFileName(list);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, config.isAppendMark()))) {
-            for (int i = 0; i < list.size(); i++) {
-                writer.write(list.get(i).toString());
+            for (T t : list) {
+                writer.write(t.toString());
                 writer.newLine();
             }
         } catch (IOException e) {
